@@ -7,4 +7,11 @@ class Car {
             println("Bagasi mobil $brand dengan $numberOfDoors pintu dibuka. ")
         }
     }
+
+    class ToyotaCar: Vehicle(brand = String()){
+        override fun honk() {
+
+            println("TIN TIN! Mobil $brand lewat!")
+        }
+    }
 }
