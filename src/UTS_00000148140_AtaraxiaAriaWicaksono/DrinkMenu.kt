@@ -1,53 +1,22 @@
 package oop_001_ataraxiaaria.week01.UTS_00000148140_AtaraxiaAriaWicaksono
 
-import java.text.NumberFormat
-import java.util.Locale
+class DrinkMenu(
+    name: String,
+    menuCode: String,
+    basePrice: Double,
+    val isLargeSize: Boolean
+) : CateringMenu(name, menuCode, basePrice) {
 
-fun formatRupiah(amount: Double): String {
-    val formatter = NumberFormat.getNumberInstance(
-        Locale("id", "ID")
-    )
-    formatter.maximumFractionDigits = 0
-    formatter.minimumFractionDigits = 0
-
-    return "Rp ${formatter.format(amount)}"
-}
-
-class CateringOrder(
-    val customer: Customer
-) {
-    var status: OrderStatus = OrderStatus.WAITING_LIST
-
-    private val orderItems: MutableList<Pair<CateringMenu, Int>> =
-        mutableListOf()
-
-    fun addMenuToOrder(menu: CateringMenu, qty: Int) {
-        orderItems.add(Pair(menu, qty))
+    override fun calculateSubtotal(quantity: Int): Double {
+        val price = basePrice + if (isLargeSize) 5000.0 else 0.0
+        return price * quantity
     }
 
-    fun printInvoice() {
-        var grandTotal = 0.0
+    override fun printMenuDetails(quantity: Int) {
+        val size = if (isLargeSize) "Large" else "Regular"
+        val subtotal = calculateSubtotal(quantity)
 
-        println()
-        println("================ INVOICE ================")
-        println("Customer: ${customer.name} (${customer.phone})")
-        println("Delivery Address: ${customer.deliveryAddress}")
-        println()
-        println("Order Status: $status")
-        println()
-
-        orderItems.forEachIndexed { index, item ->
-            val (menu, quantity) = item
-
-            print("${index + 1}. ")
-            menu.printMenuDetails(quantity)
-
-            grandTotal += menu.calculateSubtotal(quantity)
-            println()
-        }
-
-        println("-----------------------------------------")
-        println("GRAND TOTAL: ${formatRupiah(grandTotal)}")
-        println("=========================================")
+        println("[DRINK] $menuCode - $name ($size)")
+        println("  Qty: $quantity cups | Subtotal: ${formatRupiah(subtotal)}")
     }
 }
