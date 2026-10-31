@@ -6,4 +6,12 @@ class NetworkClient private constructor(val url: String) {
         println("Menghubungkan ke $url")
     }
 
+    companion object {
+
+        fun create(url: String): NetworkClient {
+            return NetworkClient(url)
+        }
+
+    }
+
 }
